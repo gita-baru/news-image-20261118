@@ -4,7 +4,7 @@
 [![rank](https://make.fun/badge/news-image-20261118/gita-baru/news-image-20261118/rank.svg)](https://make.fun/bounty/news-image-20261118/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
 [![reward](https://make.fun/badge/news-image-20261118/gita-baru/news-image-20261118/reward.svg)](https://make.fun/bounty/news-image-20261118?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261118)
 
-An editorial front page that sums up the world's news of Wednesday 18 November 2026 in one image: U.S. strikes on Iran and the retaliation in Kuwait and Bahrain, the Kerch Bridge hit, Xi and Putin meeting in Shenzhen, Peltola winning Alaska, plus Ebola, measles, Voyager 1 and Cyclone Xavier. The image is drawn by `draw.py` (PIL) and `main.ts` copies the finished `entry.png` to the output directory.
+Version 2 of an editorial front page that sums up the world's news of Wednesday 18 November 2026 in one image: a UTC timeline, four hero stories (U.S. strikes on Iran, the Kerch Bridge hit, Xi and Putin in Shenzhen, Peltola winning Alaska), a numbered grid of 12 more stories, a world map, 24 more stories, and a date check naming what broke before the day and what was not yet due. The image is drawn by `draw.py` (PIL) and `main.ts` copies the finished `entry.png` to the output directory.
 
 ## Run it
 
