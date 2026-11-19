@@ -182,10 +182,9 @@ def vis_kerch(x0, y0, x1, y1):
     d.rectangle([x0, y0 + 84, x1, y1], fill=(22, 48, 80))
     waves(d, y0 + 96, x0 + 4, x1 - 4, (110, 155, 185), amp=2, step=22)
     deck = y0 + 76
-    d.rectangle([x0 + 6, deck, x0 + 44, deck + 6], fill=(204, 212, 220))
-    d.rectangle([x0 + 70, deck, x1 - 6, deck + 6], fill=(204, 212, 220))
-    d.polygon([(x0 + 44, deck), (x0 + 70, deck), (x0 + 64, deck + 16),
-               (x0 + 50, deck + 16)], fill=(168, 176, 186))
+    # deck drawn INTACT: the 18 Nov story is a fresh strike that suspends
+    # traffic, not the span collapse (that happened 17 Nov)
+    d.rectangle([x0 + 6, deck, x1 - 6, deck + 6], fill=(204, 212, 220))
     od.arc([x0 + 14, deck - 34, x1 - 14, deck + 16], start=180, end=360,
            fill=(226, 232, 238, 255), width=4)
     d.rectangle([x0 + 18, deck + 6, x0 + 23, y0 + 84], fill=(180, 188, 196))
@@ -221,19 +220,30 @@ def vis_shenzhen(x0, y0, x1, y1):
                             fill=col)
 
 
-def vis_alaska(x0, y0, x1, y1):
-    vgrad(d, (x0, y0, x1, y1), (38, 60, 92), (22, 36, 60))
-    d.polygon([(x0 + 14, y0 + 84), (x0 + 22, y0 + 44), (x0 + 52, y0 + 30),
-               (x0 + 82, y0 + 36), (x0 + 100, y0 + 52), (x0 + 96, y0 + 66),
-               (x0 + 66, y0 + 74), (x0 + 36, y0 + 76)], fill=(96, 126, 156))
-    d.polygon([(x0 + 14, y0 + 84), (x0 + 6, y0 + 92), (x0 + 2, y0 + 88),
-               (x0 + 10, y0 + 80)], fill=(96, 126, 156))
-    starburst(d, x0 + 56, y0 + 52, 11, 4, (255, 208, 90))
-    bx, by, bw = x0 + 10, y1 - 22, x1 - x0 - 20
-    d.rounded_rectangle([bx, by, bx + bw, by + 10], radius=5, fill=(120, 40, 40))
-    d.rounded_rectangle([bx, by, bx + int(bw * 0.56), by + 10], radius=5,
-                        fill=(52, 110, 200))
-    d.text((bx, by - 15), "56–44", font=font(SANS_B, 13), fill=(255, 208, 90))
+def vis_voyager(x0, y0, x1, y1):
+    vgrad(d, (x0, y0, x1, y1), (8, 14, 30), (24, 38, 68))
+    # stars
+    for (sx, sy, sr) in ((10, 12, 1), (30, 8, 1), (55, 18, 2), (78, 10, 1),
+                         (95, 22, 1), (18, 40, 1), (88, 44, 2), (40, 30, 1),
+                         (70, 58, 1), (8, 66, 1), (100, 70, 1), (48, 78, 1),
+                         (26, 92, 1), (92, 96, 1)):
+        d.ellipse([x0 + sx - sr, y0 + sy - sr, x0 + sx + sr, y0 + sy + sr],
+                  fill=(235, 238, 245))
+    # distant Earth far behind, small and blue
+    glow(od, x0 + 18, y0 + 92, 20, (120, 170, 235), peak=90)
+    d.ellipse([x0 + 12, y0 + 86, x0 + 24, y0 + 98], fill=(150, 190, 240))
+    # Voyager: dish + bus + boom
+    cx, cy = x0 + 62, y0 + 50
+    d.ellipse([cx - 26, cy - 26, cx + 26, cy + 26],
+              outline=(200, 206, 214), width=2)
+    d.line([(cx - 26, cy), (cx + 26, cy)], fill=(200, 206, 214), width=1)
+    d.rectangle([cx - 4, cy, cx + 4, cy + 22], fill=(180, 188, 196))
+    d.rectangle([cx - 12, cy + 22, cx + 12, cy + 30], fill=(150, 158, 166))
+    d.line([(cx, cy + 30), (cx + 22, cy + 48)], fill=(200, 206, 214), width=2)
+    starburst(d, cx + 24, cy + 50, 5, 2, (255, 208, 90))
+    # faint signal arcs from the dish
+    od.arc([cx - 34, cy - 34, cx + 34, cy + 34], start=200, end=340,
+           fill=(255, 208, 90, 160), width=2)
 
 
 HEROES = [
@@ -242,17 +252,17 @@ HEROES = [
          summary="Missile sites hit on Qeshm Island. Iran strikes back in Kuwait and Bahrain.",
          source="CONFIRMED · AP", vis=vis_gulf),
     dict(num=2, region="EUROPE", rc=BLUE, tag="UKRAINE",
-         headline="KERCH BRIDGE HIT",
-         summary="Second day of strikes on the Crimea crossing. A road span collapses.",
+         headline="KERCH BRIDGE HIT AGAIN",
+         summary="Third attack in a week; traffic suspended.",
          source="CLAIM · KYIV", vis=vis_kerch),
     dict(num=3, region="ASIA", rc=TEAL, tag="CHINA",
          headline="XI AND PUTIN MEET",
          summary="Shenzhen talks before Thursday's trilateral summit with Trump.",
          source="CONFIRMED · AP", vis=vis_shenzhen),
-    dict(num=4, region="AMERICAS", rc=PURPLE, tag="U.S. POLITICS",
-         headline="PELTOLA WINS ALASKA",
-         summary="Democrat takes the Senate seat. Democrats lead 56–44.",
-         source="CONFIRMED · AP", vis=vis_alaska),
+    dict(num=4, region="SCIENCE", rc=CYAN, tag="SPACE",
+         headline="VOYAGER 1, ONE LIGHT-DAY",
+         summary="NASA probe reaches one light-day from Earth at 05:16 ET.",
+         source="CONFIRMED · NASA", vis=vis_voyager),
 ]
 
 HROWS = [(174, 298), (306, 430)]
@@ -327,18 +337,18 @@ def icon(kind, x, y, col):
 
 
 GRID = [
-    (5, "TECH", SLATE, "NVIDIA Q3: $115.8B, UP 103%",
-     "Board rules out Huang's return.", "REUTERS", "chip"),
+    (5, "TECH", SLATE, "ANTHROPIC IPO: $81B",
+     "Biggest-ever offering.", "REUTERS", "chart"),
     (6, "ASIA", TEAL, "QUAD MEETS IN MANILA",
      "First leaders' meeting in 2+ years.", "AP", "globe"),
     (7, "ASIA", TEAL, "APEC OPENS IN SHENZHEN",
      "Leaders gather as Xi greets Trump.", "AP", "globe"),
     (8, "MIDDLE EAST", RED, "HOUTHIS HIT SAUDI PIPELINE",
      "Five drones hit pipeline stations.", "AL JAZEERA", "drone"),
-    (9, "MIDDLE EAST", RED, "BOARD OF PEACE BLAMES BOTH",
-     "Accuses Israel and Hamas both.", "AP", "scale"),
-    (10, "MIDDLE EAST", RED, "KAHANA ELECTED SPEAKER",
-     "Parliament picks Matan Kahana.", "REUTERS", "columns"),
+    (9, "MIDDLE EAST", RED, "950,000 IN GAZA FLOOD ZONE",
+     "Displaced face a fourth winter.", "UN NEWS", "pin"),
+    (10, "MARKETS", SLATE, "FED MINUTES: MORE HIKES",
+     "Almost all officials see hikes.", "REUTERS", "chart"),
     (11, "EUROPE", BLUE, "EU PROPOSES €45B LOAN",
      "Loan to be repaid by Russia.", "REUTERS", "euro"),
     (12, "MIDDLE EAST", RED, "ISRAEL PUSHES INTO GAZA",
@@ -347,8 +357,8 @@ GRID = [
      "Four killed in overnight attacks.", "CLAIM · KYIV", "burst"),
     (14, "EUROPE", BLUE, "DRONES OVER DNIPRO",
      "141 drones counted, 126 downed.", "CLAIM · KYIV", "drone"),
-    (15, "TECH", SLATE, "ANTHROPIC IPO: $81B",
-     "Amazon, Google hold ~28%.", "REUTERS", "chart"),
+    (15, "MARKETS", SLATE, "GOLD SLUMPS BELOW $3,800",
+     "Gold falls as dollar rallies.", "REUTERS", "chart"),
     (16, "MARKETS", SLATE, "STOCKS SLIP, NIKKEI GAINS",
      "Dow −1.1%; Nikkei +1.0%.", "REUTERS", "chart"),
 ]
@@ -408,12 +418,13 @@ for poly in CONTINENTS:
     d.polygon(poly, fill=LAND, outline=EDGE)
 DOTS = [
     (1, 624, 708, RED), (2, 536, 684, BLUE), (3, 845, 712, TEAL),
-    (4, 95, 684, PURPLE), (5, 130, 722, PURPLE), (6, 895, 744, TEAL),
+    (5, 130, 722, PURPLE), (6, 895, 744, TEAL),
     (7, 872, 730, TEAL), (8, 606, 736, RED), (9, 572, 706, RED),
-    (10, 588, 722, RED), (11, 498, 686, BLUE), (12, 560, 730, RED),
+    (10, 90, 712, PURPLE), (11, 498, 686, BLUE), (12, 560, 730, RED),
     (13, 542, 716, BLUE), (14, 550, 694, BLUE), (15, 165, 700, PURPLE),
     (16, 200, 726, PURPLE),
 ]
+# note: no dot for #4 (Voyager 1 is in space, no Earth location)
 for num, cx, cy, col in DOTS:
     d.ellipse([cx - 8, cy - 8, cx + 8, cy + 8], fill=col,
               outline=WHITE, width=1)
@@ -426,8 +437,8 @@ d.text((MX, 778), "ALSO ON WEDNESDAY 18 NOVEMBER",
        font=font(SANS_B, 14), fill=INK)
 ALSO = [
     "Cyclone Xavier, cat 5, hits the Northern Cook Islands",
-    "Voyager 1 reaches one light-day from Earth (05:16 ET)",
-    "U.S. loses measles-free status after 26 years (5,412 cases)",
+    "UniCredit, Germany agree on Commerzbank takeover",
+    "Startup Calif finds critical Java flaw using AI",
     "Russian military plane crashes in Siberia; 19 killed",
     "India's wholesale inflation 12.29%, highest in 4 years",
     "India–Japan 2+2 dialogue opens in Tokyo",
@@ -464,21 +475,26 @@ for i, item in enumerate(ALSO):
     d.text((nx, ay), txt, font=af, fill=INK)
 
 # ------------------------------------------------------------ date check
-d.rounded_rectangle([MX, 954, W - MX, 998], radius=8,
+d.rounded_rectangle([MX, 952, W - MX, 999], radius=8,
                     fill=(250, 244, 214), outline=(200, 170, 90), width=1)
-d.text((MX + 12, 960), "DATE CHECK", font=font(SANS_B, 12), fill=RED)
-dc1 = ("LEFT OUT — broke before 18 Nov: Ebola passes 11,000 (11–15 Nov) · "
-       "Huang quits Nvidia (12–13 Nov) · FAA ground stop (13 Nov) · "
-       "tankers hit in Hormuz (16 Nov)")
-dc2 = ("NOT YET — due after 18 Nov: Xi–Trump–Putin trilateral (Thu 19 Nov) · "
+d.text((MX + 12, 957), "DATE CHECK", font=font(SANS_B, 11), fill=RED)
+dcf = font(SANS, 10)
+lab_w = d.textlength("DATE CHECK", font=font(SANS_B, 11))
+dc1 = ("LEFT OUT — broke before 18 Nov: Peltola wins Alaska Senate (Tue 17 Nov) · "
+       "Nvidia Q3 results (Tue 17 Nov) · Kahana elected speaker (Tue 17 Nov) ·")
+dc2 = ("Kerch span falls (Tue 17 Nov) · Board of Peace report (Tue 17 Nov) · "
+       "Ebola 11,000 (11–15 Nov) · Huang quits Nvidia (12–13 Nov) · "
+       "FAA ground stop (13 Nov) · Hormuz tankers (16 Nov)")
+dc3 = ("NOT YET — due after 18 Nov: Xi–Trump–Putin trilateral (Thu 19 Nov) · "
        "Cyclone Akvan landfall (Fri 20 Nov)")
-d.text((MX + 12, 976), dc1, font=font(SANS, 11), fill=INK)
-d.text((MX + 12, 988), dc2, font=font(SANS, 11), fill=INK)
+d.text((MX + 12 + lab_w + 8, 957), dc1, font=dcf, fill=INK)
+d.text((MX + 12, 969), dc2, font=dcf, fill=INK)
+d.text((MX + 12, 981), dc3, font=dcf, fill=INK)
 
 # ---------------------------------------------------------------- footer
 foot = ("Every story happened or was first reported on Wed 18 Nov 2026. "
         "CLAIM = one side's account. Sources: AP, Reuters, AFP, Al Jazeera, "
-        "NPR, PAHO. Original drawings.")
+        "NPR, PAHO, UN News, NASA. Original drawings.")
 ff = font(SANS, 10)
 fw = d.textlength(foot, font=ff)
 d.text(((W - fw) / 2, 1004), foot, font=ff, fill=GREY)
